@@ -3,3 +3,6 @@ Python script that automates keystrokes with WPM argument, and Startup time argu
 
 # Dependencies
 pynput
+
+# Confirmed tests
+locally on Windows 11  

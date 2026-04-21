@@ -47,18 +47,32 @@ SPECIAL_KEYS = {
 }
 
 
+SHIFTED = set('~!@#$%^&*()_+{}|:"<>?') | set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+# Minimum hold time for each keypress. Needed over remote-desktop protocols
+# (Chrome Remote Desktop, RDP, VNC) where sub-millisecond key events are
+# dropped by the transport.
+MIN_KEY_HOLD = 0.02
+
+
 def type_text(text: str, wpm: float) -> None:
     """Type `text` at approximately `wpm` words per minute."""
-    # Convention: 5 chars = 1 word  =>  chars/sec = wpm * 5 / 60
     chars_per_second = wpm * 5 / 60
-    delay_per_char = 1.0 / chars_per_second
+    delay_per_char = max(1.0 / chars_per_second, MIN_KEY_HOLD * 2)
 
     keyboard = Controller()
 
     for char in text:
         if char in SPECIAL_KEYS:
             keyboard.press(SPECIAL_KEYS[char])
+            time.sleep(MIN_KEY_HOLD)
             keyboard.release(SPECIAL_KEYS[char])
+        elif char in SHIFTED:
+            keyboard.press(Key.shift)
+            time.sleep(MIN_KEY_HOLD)
+            keyboard.type(char)
+            time.sleep(MIN_KEY_HOLD)
+            keyboard.release(Key.shift)
         else:
             keyboard.type(char)
         time.sleep(delay_per_char)
