@@ -52,7 +52,7 @@ SHIFTED = set('~!@#$%^&*()_+{}|:"<>?') | set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 # Minimum hold time for each keypress. Needed over remote-desktop protocols
 # (Chrome Remote Desktop, RDP, VNC) where sub-millisecond key events are
 # dropped by the transport.
-MIN_KEY_HOLD = 0.02
+MIN_KEY_HOLD = 0.05
 
 
 def type_text(text: str, wpm: float) -> None:
